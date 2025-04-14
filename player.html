@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/50c783d11a.js" crossorigin="anonymous"></script>
+</head>
+<body class="playlist">
+
+
+<div class="liiist">
+    <div class="conte">
+
+
+
+         <img src="backburnt.png" alt="" class="photo">
+         <audio id="audioPlayer" preload="metadata"></audio>
+            <p id="track"></p>
+            <p id="arr"></p>
+         <input type="range" value="0" id="progress" >
+
+        <div class="controls">
+
+            <div><i class="fa-solid fa-shuffle"></i></div>  
+            <div class="bot" onclick="prevSong()"><i class="fa-solid fa-backward" id="back"></i></div>
+            <div class="bot" onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+            <div class="bot" onclick="nextSong()"><i class="fa-solid fa-forward"></i></div>
+            <div><i class="fa-solid fa-repeat"></i></div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    let progress = document.getElementById("progress");
+    let ctrlIcon = document.getElementById("ctrlIcon"); 
+    let track = document.getElementById("track");   
+    let arr = document.getElementById("arr");
+    let photo = document.querySelector(".photo");
+
+    const songs =[
+    { src: 'songs/Addison Rae - Diet Pepsi (Lyric Video).mp3',img: 'img/diet pepsi.jpg',   name:'Diet Pepsi', artist: 'Addison Rae' },
+    { src: 'songs/Backburner.mp3', img:'img/backburnt.png', name:'Backburner', artist: 'NIKI' },
+    { src: 'songs/Cry For Me.mp3', img:'img/the weeknd.jpg', name: 'Cry For Me', artist: 'The Weeknd'}, 
+    { src: 'songs/2.mp3', img:'img/the weeknd.jpg', name: 'I Can\'t F*cking Sing', artist: 'The Weeknd'},    
+    { src: 'songs/The Weeknd - São Paulo (Audio).mp3', img:'img/the weeknd.jpg', name: 'Sao Paulo', artist: 'The Weeknd'},    
+    { src: 'songs/Daleng Dale.mp3', img:'img/amnse.png', name: 'Daleng Dale', artist: 'GAT'},    
+    { src: 'songs/Mundo.mp3', img:'img/mundo.jpg', name: 'Mundo', artist: 'IV of Spades'},    
+    { src: 'songs/love..mp3', img:'img/love..jpg', name: 'love.', artist: 'wave to earth'},    
+    { src: 'songs/Otonoke.mp3', img:'img/oto.jpg', name: 'Otonoke', artist: 'CreppyNuts'},    
+    { src: 'songs/Sticky.mp3', img:'img/stick.jpg', name: 'Sticky', artist: 'Tyler the Creator'},    
+    { src: 'songs/Kendrick Lamar - luther (Official Audio).mp3', img:'img/lut.jpg', name: 'luther', artist: 'Kendrick Lamar with SZA'},    
+    { src: 'songs/Randomantic.mp3', img:'img/james.jpg', name: 'Randomatic', artist: 'James Reid'},    
+
+ ];
+
+    let currentSongIndex = 0;
+    
+
+    function loadSong(){
+
+        audioPlayer.src = songs[currentSongIndex].src;
+        track.textContent = songs[currentSongIndex].name;
+        arr.textContent= songs[currentSongIndex].artist;
+        photo.src = songs[currentSongIndex].img;
+        audioPlayer.load();
+
+
+    }
+
+    loadSong(currentSongIndex);
+
+    
+
+
+    audioPlayer.onloadedmetadata = function (){
+        progress.max = audioPlayer.duration;
+        progress.value = audioPlayer.currentTime;
+    }
+    
+    function playPause(){
+    if(ctrlIcon.classList.contains("fa-pause")){
+            audioPlayer.pause();
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+    }else{
+            audioPlayer.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+    }
+
+    window.onload = function() {
+        audioPlayer.pause();
+        ctrlIcon.classList.remove("fa-pause");
+        ctrlIcon.classList.add("fa-play");
+    };
+    
+    function nextSong(){
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        loadSong(currentSongIndex);
+        audioPlayer.autoplay = true;
+
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+
+    }
+
+    function prevSong(){
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        loadSong(currentSongIndex);
+        audioPlayer.autoplay = true;
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+
+    }
+    
+    if(audioPlayer.play()){
+        setInterval(()=>{
+            progress.value = audioPlayer.currentTime;
+        }, 500);
+    }
+    
+    progress.onchange = function(){
+        audioPlayer.play();
+        audioPlayer.currentTime = progress.value;
+        audioPlayer.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+    
+    }
+    audioPlayer.onended = function(){
+        nextSong();
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+    }
+    </script>
+        
+
+</body>
+</html>
